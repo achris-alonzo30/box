@@ -44,6 +44,7 @@ export const Navbar = () => {
                     </div>
                     <div className="relative">
                         <Bell className="text-zinc-500 size-6" />
+                        <span className="sr-only">Bell Notifications</span>
                         <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-[0.4rem] py-1 text-xs font-semibold leading-none text-rose-100 bg-rose-400 rounded-full">
                             3
                         </span>
@@ -58,6 +59,7 @@ export const Navbar = () => {
                 </aside>
                 <Link href="/settings">
                     <Settings className="size-6 cursor-pointer text-zinc-500" />
+                    <span className="sr-only">Settings</span>
                 </Link>
             </nav>
         </header>
