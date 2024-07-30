@@ -6,7 +6,6 @@ const initialState: { isSidebarCollapsed: boolean} = {
 
 // reducers.state takes in the keys of the initial state
 // reducers.actions takes in the upcoming values received from the reducer
-
 export const globalSlice = createSlice({
     name: "global",
     initialState,
