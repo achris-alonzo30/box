@@ -4,11 +4,12 @@ import type { Metadata } from "next";
 
 import { Fira_Sans } from "next/font/google";
 import { ThemeProvider } from "@/provider/theme-provider";
+import { DashboardWrapper } from "@/components/dashboard-wrapper";
 
 const font = Fira_Sans({
   subsets: ["latin"],
   variable: "--font-fira",
-  weight: ["200", "300", "400", "500", "600", "700",  "800", "900"],
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 })
 
 export const metadata: Metadata = {
@@ -23,14 +24,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn('antialiased',font.className)}>
-      <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-        {children}
+      <body className={cn('antialiased', font.className)}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <DashboardWrapper>
+            {children}
+          </DashboardWrapper>
+          
         </ThemeProvider>
       </body>
     </html>
