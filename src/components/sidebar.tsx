@@ -15,6 +15,8 @@ export const Sidebar = () => {
                     alt="Box word for website logo"
                 />
                 <Button
+                    size="icon"
+                    variant="ghost"
                     className="rounded-full"
                     onClick={() => { }}
                 >
