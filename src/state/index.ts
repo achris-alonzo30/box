@@ -1,7 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState: { isSidebarCollapsed: boolean} = {
-    isSidebarCollapsed: false
+
+type InitialStateProps = {
+    isSidebarCollapsed: boolean;
+}
+
+const initialState: InitialStateProps = {
+    isSidebarCollapsed: false,
 }
 
 // reducers.state takes in the keys of the initial state
@@ -10,12 +15,12 @@ export const globalSlice = createSlice({
     name: "global",
     initialState,
     reducers: {
-        setIsSideBarCollapsed: (state, action: PayloadAction<boolean>) => {
+        setIsSidebarCollapsed: (state, action: PayloadAction<boolean>) => {
             state.isSidebarCollapsed = action.payload;
-        },
+        }
     }
 });
 
-export const { setIsSideBarCollapsed } = globalSlice.actions;
+export const { setIsSidebarCollapsed } = globalSlice.actions;
 
 export default globalSlice.reducer
