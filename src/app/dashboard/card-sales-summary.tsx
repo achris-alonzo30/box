@@ -62,10 +62,11 @@ export const CardSalesSummary = () => {
                 <Loader2 className="size-5 animate-spin text-muted-foreground" />
             ) : (
                 <>
-                    <h2 className="card-header">Sales Summary</h2>
-                    <hr className="divider" />
-                   
-                    <aside>
+                    <header>
+                        <h2 className="card-header">Sales Summary</h2>
+                        <hr className="divider" />
+                    </header>
+                    <aside className="overflow-auto">
                         <div className="flex justify-between items-center mb-6 px-7 mt-5">
                             <hgroup className="text-lg font-medium">
                                 <p className="text-xs">
@@ -158,7 +159,7 @@ export const CardSalesSummary = () => {
                         <nav className="flex justify-between items-center mt-6 text-sm px-7 mb-4 text-muted-foreground">
                             <p className="text-sm">{salesData.length || 0} days</p>
                             <p className="text-sm">
-                                HIghest Sales Data:{" "}
+                                Highest Sales Data:{" "}
                                 <span className="font-bold">{highestValueDate}</span>
                             </p>
                         </nav>

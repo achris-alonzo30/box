@@ -8,16 +8,17 @@ import Image from "next/image";
 
 export const CardPopularProducts = () => {
     const { data: dashboard, isLoading } = useGetDashboardQuery();
-    console.log(dashboard?.popularProducts)
+    
     return (
         <article className="row-span-3 xl:row-span-6 shadow-md rounded-2xl pb-16">
             {isLoading ? (
                 <Loader2 className="size-5 animate-spin text-muted-foreground" />
             ) : (
                 <>
-                    
-                    <h2 className="card-header">Popular Products</h2>
-                    <hr className="divider" />
+                    <header>
+                        <h2 className="card-header">Popular Products</h2>
+                        <hr className="divider" />
+                    </header>
                     <aside className="overflow-auto h-full">
                         {dashboard?.popularProducts.map((product) => (
                             <div

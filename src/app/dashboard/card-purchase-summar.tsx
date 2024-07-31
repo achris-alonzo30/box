@@ -32,7 +32,7 @@ export const CardPurchaseSummary = () => {
                     <h2 className="card-header">Purchase Summary</h2>
                     <hr className="divider" />
 
-                    <aside>
+                    <aside className="overflow-auto">
                         <hgroup className="mb-4 mt-7 px-7">
                             <p className="text-xs">Purchased</p>
                             <div className="flex items-center">
@@ -57,7 +57,7 @@ export const CardPurchaseSummary = () => {
                                 )}
                             </div>
                         </hgroup>
-                        <ResponsiveContainer width="100%" height={350} className="px-7">
+                        <ResponsiveContainer width="100%" height={200} className="p-2">
                             <AreaChart
                                 data={purchaseData}
                                 margin={{
