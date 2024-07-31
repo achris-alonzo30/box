@@ -15,6 +15,7 @@ export const CardPopularProducts = () => {
                 <Loader2 className="size-5 animate-spin text-muted-foreground" />
             ) : (
                 <>
+                    
                     <h2 className="card-header">Popular Products</h2>
                     <hr className="divider" />
                     <aside className="overflow-auto h-full">

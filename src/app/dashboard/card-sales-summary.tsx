@@ -4,6 +4,7 @@ import { useGetDashboardQuery } from "@/state/api";
 
 import {
     Loader2,
+    TrendingDown,
     TrendingUp,
     TriangleAlert
 } from "lucide-react";
@@ -26,6 +27,7 @@ import {
     SelectTrigger,
     SelectContent,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 export const CardSalesSummary = () => {
     const { data, isLoading, isError } = useGetDashboardQuery();
@@ -60,10 +62,9 @@ export const CardSalesSummary = () => {
                 <Loader2 className="size-5 animate-spin text-muted-foreground" />
             ) : (
                 <>
-                    <hgroup>
-                        <h2 className="card-header">Sales Summary</h2>
-                        <hr className="divider" />
-                    </hgroup>
+                    <h2 className="card-header">Sales Summary</h2>
+                    <hr className="divider" />
+                   
                     <aside>
                         <div className="flex justify-between items-center mb-6 px-7 mt-5">
                             <hgroup className="text-lg font-medium">
@@ -75,8 +76,14 @@ export const CardSalesSummary = () => {
                                         maximumFractionDigits: 2,
                                     })}m
                                 </span>
-                                <span className="text-emerald-500 text-sm ml-2">
-                                    <TrendingUp className="inline size-4 mr-1" />
+                                <span className={cn("text-sm ml-2",
+                                    avgChangePerc >= 0 ? "text-emerald-500" : "text-rose-500"
+                                )}>
+                                    {avgChangePerc >= 0 ? (
+                                        <TrendingUp className="inline size-4 mr-1" />
+                                    ) : (
+                                        <TrendingDown className="inline size-4 mr-1" />
+                                    )}
                                     {avgChangePerc.toFixed(2)}%
                                 </span>
                             </hgroup>
