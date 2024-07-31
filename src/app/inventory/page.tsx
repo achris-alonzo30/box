@@ -13,11 +13,12 @@ const InventoryPage = () => {
     if (isLoading) return <p>Loading...</p>;
 
     if (isError || !data) return notFound();
+    console.log(data)
     return (
         <section className="flex flex-col">
             <Heading name="Inventory" />
             <DataTable 
-                filter=""
+                filter="name"
                 data={data}
                 columns={inventoryColumns}
             />

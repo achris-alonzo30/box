@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
+import { Checkbox } from "@/components/ui/checkbox"
 
 
 // productId: string;
@@ -23,6 +24,36 @@ import { ColumnDef } from "@tanstack/react-table";
 //     stockQuantity: number;
 
 export const inventoryColumns: ColumnDef<Product>[] = [
+    {
+        id: "select",
+        header: ({ table }) => (
+            <Checkbox
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && "indeterminate")
+                }
+                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                aria-label="Select all"
+            />
+        ),
+        cell: ({ row }) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                aria-label="Select row"
+            />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    },
+    {
+        accessorKey: "productId",
+        header: "Product ID",
+        cell: ({ row }) => {
+            const productId: string = row.getValue("productId");
+            return <span className="line-clamp-1">{productId}</span>
+        }
+    },
     {
         accessorKey: "name",
         header: "Name",
@@ -48,7 +79,7 @@ export const inventoryColumns: ColumnDef<Product>[] = [
                 currency: "USD",
             }).format(amount)
 
-            return <div className="text-right font-medium">{formatted}</div>
+            return <div className="text-left font-medium">{formatted}</div>
         },
     },
     {
@@ -68,7 +99,7 @@ export const inventoryColumns: ColumnDef<Product>[] = [
         cell: ({ row }) => {
             const rating = parseFloat(row.getValue("rating"));
 
-            return <div className="text-right font-medium">{rating}</div>;
+            return <div className="font-medium text-left">{rating}</div>;
         }
     },
     {
@@ -84,7 +115,7 @@ export const inventoryColumns: ColumnDef<Product>[] = [
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
-        },
+        }
     },
     {
         id: "actions",

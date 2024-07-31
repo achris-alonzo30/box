@@ -1,11 +1,17 @@
 "use client";
 
-import { CheckCircle, Package, Tag, TrendingDown, TrendingUp } from "lucide-react";
+import { 
+    Tag,
+    Package,
+    TrendingUp,
+    CheckCircle,  
+    TrendingDown,  
+} from "lucide-react";
+import { StatCard } from "./stat-card";
+import { CardSalesSummary } from "./card-sales-summary";
 import { CardExpenseSummary } from "./card-expense-summary";
 import { CardPopularProducts } from "./card-popular-products";
 import { CardPurchaseSummary } from "./card-purchase-summar";
-import { CardSalesSummary } from "./card-sales-summary";
-import { StatCard } from "./stat-card";
 
 const Dashboard = () => {
     return (

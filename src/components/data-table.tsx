@@ -59,7 +59,7 @@ export function DataTable<TData, TValue>({
         <>
             <aside className="flex items-center py-4">
                 <Input
-                    placeholder="Filter emails..."
+                    placeholder="Filter by name..."
                     value={(table.getColumn(filter)?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
                         table.getColumn(filter)?.setFilterValue(event.target.value)
@@ -112,6 +112,10 @@ export function DataTable<TData, TValue>({
                 </Table>
             </section>
             <footer className="flex items-center justify-end space-x-2 py-4">
+                <nav className="flex-1 text-sm text-muted-foreground">
+                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                    {table.getFilteredRowModel().rows.length} row(s) selected.
+                </nav>
                 <Button
                     variant="outline"
                     size="sm"
