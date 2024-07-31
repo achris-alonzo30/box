@@ -11,7 +11,7 @@ import { StatCard } from "./stat-card";
 import { CardSalesSummary } from "./card-sales-summary";
 import { CardExpenseSummary } from "./card-expense-summary";
 import { CardPopularProducts } from "./card-popular-products";
-import { CardPurchaseSummary } from "./card-purchase-summar";
+import { CardPurchaseSummary } from "./card-purchase-summary";
 
 const Dashboard = () => {
     return (
@@ -20,6 +20,8 @@ const Dashboard = () => {
             <CardSalesSummary />
             <CardPurchaseSummary />
             <CardExpenseSummary />
+
+            {/* TODO: Make this dynamic */}
             <StatCard 
                 title="Customer & Expenses"
                 dateRange="22 - 29 October 2023"

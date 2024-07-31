@@ -16,13 +16,6 @@ import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox"
 
-
-// productId: string;
-//     name: string;
-//     price: number;
-//     rating?: number;
-//     stockQuantity: number;
-
 export const inventoryColumns: ColumnDef<Product>[] = [
     {
         id: "select",
