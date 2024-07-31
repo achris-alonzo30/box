@@ -6,6 +6,7 @@ import {
     PurchaseSummary,
     ExpenseByCategorySummary,
     NewProduct,
+    User,
 } from "./types";
 
 
@@ -23,7 +24,7 @@ export const api = createApi({
         baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL!
     }),
     reducerPath: "api",
-    tagTypes: ["DashboardMetrics", "Products"],
+    tagTypes: ["DashboardMetrics", "Products", "Users"],
     endpoints: (build) => ({
         getDashboard: build.query<DashboardMetrics, void>({
             query: () => "/dashboard",
@@ -35,6 +36,10 @@ export const api = createApi({
                 params: search ? { search } : {}
             }),
             providesTags: ["Products"]
+        }),
+        getUsers: build.query<User[], void>({
+            query: () => "/users",
+            providesTags: ["Users"]
         }),
         createProduct: build.mutation<Product, NewProduct>({
             query: (newProduct) => ({
@@ -50,5 +55,6 @@ export const api = createApi({
 export const { 
     useGetDashboardQuery,
     useGetProductsQuery,
+    useGetUsersQuery,
     useCreateProductMutation
 } = api;

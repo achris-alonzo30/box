@@ -1,3 +1,9 @@
+export interface User {
+    userId: string;
+    name: string;
+    email: string;
+}
+
 export interface Product {
     productId: string;
     name: string;
