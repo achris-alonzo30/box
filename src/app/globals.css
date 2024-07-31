@@ -96,3 +96,11 @@ body,
     grid-template-rows: repeat(8, 7.5vh)
   }
 }
+
+.card-header {
+  @apply text-lg font-semibold px-7 pt-5 pb-2;;
+}
+
+.divider {
+  @apply border border-muted-foreground/10;
+}

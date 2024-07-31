@@ -15,8 +15,8 @@ export const CardPopularProducts = () => {
                 <Loader2 className="size-5 animate-spin text-muted-foreground" />
             ) : (
                 <>
-                    <h3 className="text-lg font-semibold px-7 pt-5 pb-2">Popular Products</h3>
-                    <hr className="border border-muted-foreground/10" />
+                    <h2 className="card-header">Popular Products</h2>
+                    <hr className="divider" />
                     <aside className="overflow-auto h-full">
                         {dashboard?.popularProducts.map((product) => (
                             <div

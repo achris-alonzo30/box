@@ -1,0 +1,4 @@
+- [ ] Add Loading page for each page
+- [ ] Add Error page for each page
+- [ ] Change the color scheme
+- [ ] Add Skeleton when loading

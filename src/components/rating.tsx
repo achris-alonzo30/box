@@ -10,7 +10,7 @@ export const Rating = ({ rating }: RatingProps) => {
         <Star 
             key={index}
             className={cn("size-4",
-                index <= rating ? "text-yellow-500 fill-current" : "text-muted-foreground"
+                index <= rating ? "text-yellow-400 fill-current" : "text-muted-foreground"
             )}
         />
     ))
