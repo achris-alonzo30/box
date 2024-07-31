@@ -45,7 +45,7 @@ export const CardPopularProducts = () => {
                                         <ShoppingBag className="size-4" />
                                         <span className="sr-only">Shopping Bag</span>
                                     </Button>
-                                    <span className="ml-2">{Math.round(product.stockQuantity)}</span>
+                                    <span className="ml-2">{Math.round(product.stockQuantity / 1000)}k sold</span>
                                 </hgroup>
                             </div>
                         ))}
