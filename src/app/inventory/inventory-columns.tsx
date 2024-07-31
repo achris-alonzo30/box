@@ -1,4 +1,6 @@
-"use client"
+"use client";
+
+import { Product } from "@/state/types";
 
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
@@ -13,54 +15,34 @@ import {
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 
-export type Payment = {
-    id: string
-    amount: number
-    status: "pending" | "processing" | "success" | "failed"
-    email: string
-}
 
-export const payments: Payment[] = [
+// productId: string;
+//     name: string;
+//     price: number;
+//     rating?: number;
+//     stockQuantity: number;
+
+export const inventoryColumns: ColumnDef<Product>[] = [
     {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "m@example.com",
+        accessorKey: "name",
+        header: "Name",
     },
     {
-        id: "489e1d42",
-        amount: 125,
-        status: "processing",
-        email: "example@gmail.com",
-    },
-    // ...
-]
-
-
-export const inventoryColumns: ColumnDef<Payment>[] = [
-    {
-        accessorKey: "status",
-        header: "Status",
-    },
-    {
-        accessorKey: "email",
+        accessorKey: "price",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
+                    className="p-0 outline-none hover:bg-transparent"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Email
+                    Price
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
         },
-    },
-    {
-        accessorKey: "amount",
-        header: () => <div className="text-right">Amount</div>,
         cell: ({ row }) => {
-            const amount = parseFloat(row.getValue("amount"))
+            const amount = parseFloat(row.getValue("price"))
             const formatted = new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "USD",
@@ -70,9 +52,44 @@ export const inventoryColumns: ColumnDef<Payment>[] = [
         },
     },
     {
+        accessorKey: "rating",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    className="p-0 outline-none hover:bg-transparent"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Rating
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        cell: ({ row }) => {
+            const rating = parseFloat(row.getValue("rating"));
+
+            return <div className="text-right font-medium">{rating}</div>;
+        }
+    },
+    {
+        accessorKey: "stockQuantity",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    className="p-0 outline-none hover:bg-transparent"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    SKU
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+    },
+    {
         id: "actions",
         cell: ({ row }) => {
-            const payment = row.original
+            const product = row.original;
 
             return (
                 <DropdownMenu>
@@ -85,9 +102,9 @@ export const inventoryColumns: ColumnDef<Payment>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(payment.id)}
+                            onClick={() => navigator.clipboard.writeText(product.productId)}
                         >
-                            Copy payment ID
+                            Copy product ID
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>View customer</DropdownMenuItem>

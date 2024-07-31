@@ -1,20 +1,24 @@
 "use client";
 
-import { DataTable } from "@/components/data-table";
+import { notFound } from "next/navigation";
 import { useGetProductsQuery } from "@/state/api";
-import { inventoryColumns, payments } from "./inventory-columns";
 
-
+import { Heading } from "@/components/heading";
+import { DataTable } from "@/components/data-table";
+import { inventoryColumns } from "./inventory-columns";
 
 const InventoryPage = () => {
     const { data, isError, isLoading } = useGetProductsQuery();
 
-    
+    if (isLoading) return <p>Loading...</p>;
+
+    if (isError || !data) return notFound();
     return (
-        <section>
+        <section className="flex flex-col">
+            <Heading name="Inventory" />
             <DataTable 
                 filter=""
-                data={payments}
+                data={data}
                 columns={inventoryColumns}
             />
         </section>
