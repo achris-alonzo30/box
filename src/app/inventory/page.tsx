@@ -13,6 +13,7 @@ const InventoryPage = () => {
     return (
         <section>
             <DataTable 
+                filter=""
                 data={payments}
                 columns={inventoryColumns}
             />
