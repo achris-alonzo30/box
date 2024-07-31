@@ -35,7 +35,7 @@ export const Navbar = () => {
                 <nav className="relative">
                     <Input
                         type="search"
-                        className="w-50 md:w-80 pl-10"
+                        className="w-50 md:w-60 pl-10"
                         placeholder="Start typing to search..."
                     />
                     <aside className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
