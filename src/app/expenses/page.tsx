@@ -1,172 +1,157 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { useMemo, useState } from "react";
-import { notFound } from "next/navigation";
 import { useGetExpensesByCategoryQuery } from "@/state/api";
-
-import { Calendar as CalendarIcon } from "lucide-react";
-
-import {
-    Select,
-    SelectItem,
-    SelectLabel,
-    SelectValue,
-    SelectGroup,
-    SelectTrigger,
-    SelectContent,
-} from "@/components/ui/select";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
+import { useMemo, useState } from "react";
 import { Heading } from "@/components/heading";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+
+import { 
+    Cell,
+    Legend,
+    Pie,
+    PieChart,
+    ResponsiveContainer,
+    Tooltip,
+} from "recharts";
 import { ExpenseByCategorySummary } from "@/state/types";
 
-type AggregatedDataItemProps = {
+type AggregatedDataItem = {
     name: string;
     color?: string;
     amount: number;
-}
+};
 
-type AggregatedDataProps = {
-    [category: string]: AggregatedDataItemProps
-}
+type AggregatedData = {
+    [category: string]: AggregatedDataItem;
+};
 
-const ExpensesPage = () => {
-    const [active, setActive] = useState(0);
+const Expenses = () => {
+    const [activeIndex, setActiveIndex] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState("All");
-    const [startDate, setStartDate] = useState<Date>();
-    const [endDate, setEndDate] = useState<Date>();
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
 
-    const { data, isError, isLoading } = useGetExpensesByCategoryQuery();
+    const {
+        data: expensesData,
+        isLoading,
+        isError,
+    } = useGetExpensesByCategoryQuery();
+    const expenses = useMemo(() => expensesData ?? [], [expensesData]);
 
-    const expenses = useMemo(() => data ?? [], [data]);
+    const parseDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toISOString().split("T")[0];
+    };
 
-
-    const aggregatedData = useMemo(() => {
-        const filtered: AggregatedDataProps = expenses.filter(
-            (data: ExpenseByCategorySummary) => {
-                const matchesCategory = selectedCategory === "All" || data.category === selectedCategory;
-                const dataDate = new Date(data.date);
-                const matchesDate = !startDate || !endDate || (dataDate >= startDate && dataDate <= endDate);
+    const aggregatedData: AggregatedDataItem[] = useMemo(() => {
+        const filtered: AggregatedData = expenses
+            .filter((data: ExpenseByCategorySummary) => {
+                const matchesCategory =
+                    selectedCategory === "All" || data.category === selectedCategory;
+                const dataDate = parseDate(data.date);
+                const matchesDate =
+                    !startDate ||
+                    !endDate ||
+                    (dataDate >= startDate && dataDate <= endDate);
                 return matchesCategory && matchesDate;
-            }
-        ).reduce((acc: AggregatedDataProps, data: ExpenseByCategorySummary) => {
-            const amount = parseInt(data.amount);
-            if (!acc[data.category]) {
-                acc[data.category] = {
-                    name: data.category,
-                    amount: 0
-                };
-                acc[data.category].color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-                acc[data.category].amount += amount
-            }
-            return acc;
-        }, {});
+            })
+            .reduce((acc: AggregatedData, data: ExpenseByCategorySummary) => {
+                const amount = parseInt(data.amount);
+                if (!acc[data.category]) {
+                    acc[data.category] = { name: data.category, amount: 0 };
+                    acc[data.category].color = `#${Math.floor(
+                        Math.random() * 16777215
+                    ).toString(16)}`;
+                    acc[data.category].amount += amount;
+                }
+                return acc;
+            }, {});
 
         return Object.values(filtered);
     }, [expenses, selectedCategory, startDate, endDate]);
 
-    // TODO: Create Loading page
-    if (isLoading) return <p>Loading...</p>;
-
-    // TODO: Create Error page
-    if (isError || !data) return notFound();
-
     const classNames = {
-        label: "block text-sm font-medium"
+        label: "block text-sm font-medium text-gray-700",
+        selectInput:
+            "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md",
+    };
+
+    if (isLoading) {
+        return <div className="py-4">Loading...</div>;
+    }
+
+    if (isError || !expensesData) {
+        return (
+            <div className="text-center text-red-500 py-4">
+                Failed to fetch expenses
+            </div>
+        );
     }
 
     return (
-        <section>
-            <header className="mb-5">
+        <div>
+            {/* HEADER */}
+            <div className="mb-5">
                 <Heading name="Expenses" />
-                <p className="text-sm text-muted-foreground">A visual representation of expenses over time.</p>
-            </header>
+                <p className="text-sm text-gray-500">
+                    A visual representation of expenses over time.
+                </p>
+            </div>
 
-            <article className="flex flex-col md:flex-row justify-between gap-4">
-                <aside className="w-full md:1/3 shadow rounded-lg p-6">
+            {/* FILTERS */}
+            <div className="flex flex-col md:flex-row justify-between gap-4">
+                <div className="w-full md:w-1/3 bg-white shadow rounded-lg p-6">
                     <h3 className="text-lg font-semibold mb-4">
-                        Filter by Category & Date
+                        Filter by Category and Date
                     </h3>
                     <div className="space-y-4">
-                        <fieldset>
-                            <div>
-                                <Label>Category</Label>
-                                <Select
-                                    defaultValue="All"
-                                    onValueChange={(value) => setSelectedCategory(value)}
-                                >
-                                    <SelectTrigger className="w-[180px]">
-                                        <SelectValue placeholder="Select a category" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectLabel>Categories</SelectLabel>
-                                            <SelectItem value="All">All</SelectItem>
-                                            <SelectItem value="Office">Office</SelectItem>
-                                            <SelectItem value="Professional">Professional</SelectItem>
-                                            <SelectItem value="Salaries">Salaries</SelectItem>
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant={"outline"}
-                                        className={cn(
-                                            "w-[280px] justify-start text-left font-normal",
-                                            !startDate && "text-muted-foreground"
-                                        )}
-                                    >
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0">
-                                    <Calendar
-                                        mode="single"
-                                        selected={startDate}
-                                        onSelect={setStartDate}
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant={"outline"}
-                                        className={cn(
-                                            "w-[280px] justify-start text-left font-normal",
-                                            !endDate && "text-muted-foreground"
-                                        )}
-                                    >
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {endDate ? format(endDate, "PPP") : <span>Pick a date</span>}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0">
-                                    <Calendar
-                                        mode="single"
-                                        selected={endDate}
-                                        onSelect={setEndDate}
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                        </fieldset>
+                        {/* CATEGORY */}
+                        <div>
+                            <label htmlFor="category" className={classNames.label}>
+                                Category
+                            </label>
+                            <select
+                                id="category"
+                                name="category"
+                                className={classNames.selectInput}
+                                defaultValue="All"
+                                onChange={(e) => setSelectedCategory(e.target.value)}
+                            >
+                                <option>All</option>
+                                <option>Office</option>
+                                <option>Professional</option>
+                                <option>Salaries</option>
+                            </select>
+                        </div>
+                        {/* START DATE */}
+                        <div>
+                            <label htmlFor="start-date" className={classNames.label}>
+                                Start Date
+                            </label>
+                            <input
+                                type="date"
+                                id="start-date"
+                                name="start-date"
+                                className={classNames.selectInput}
+                                onChange={(e) => setStartDate(e.target.value)}
+                            />
+                        </div>
+                        {/* END DATE */}
+                        <div>
+                            <label htmlFor="end-date" className={classNames.label}>
+                                End Date
+                            </label>
+                            <input
+                                type="date"
+                                id="end-date"
+                                name="end-date"
+                                className={classNames.selectInput}
+                                onChange={(e) => setEndDate(e.target.value)}
+                            />
+                        </div>
                     </div>
-                </aside>
-
-                <aside className="flex-grow shadow rounded-lg p-4 md:p-6">
+                </div>
+                {/* PIE CHART */}
+                <div className="flex-grow bg-white shadow rounded-lg p-4 md:p-6">
                     <ResponsiveContainer width="100%" height={400}>
                         <PieChart>
                             <Pie
@@ -177,27 +162,27 @@ const ExpensesPage = () => {
                                 outerRadius={150}
                                 fill="#8884d8"
                                 dataKey="amount"
-                                onMouseEnter={(_, index) => setActive(index)}
+                                onMouseEnter={(_, index) => setActiveIndex(index)}
                             >
-                                {aggregatedData.map((
-                                    entry: AggregatedDataItemProps, 
-                                    index: number
-                                ) => (
-                                    <Cell
-                                        key={`cell-${index}`}
-                                        fill={entry.color}
-                                        fillOpacity={active === index ? 1 : 0.6}
-                                    />
-                                ))}
+                                {aggregatedData.map(
+                                    (entry: AggregatedDataItem, index: number) => (
+                                        <Cell
+                                            key={`cell-${index}`}
+                                            fill={
+                                                index === activeIndex ? "rgb(29, 78, 216)" : entry.color
+                                            }
+                                        />
+                                    )
+                                )}
                             </Pie>
                             <Tooltip />
                             <Legend />
                         </PieChart>
                     </ResponsiveContainer>
-                </aside>
-            </article>
-        </section>
-    )
-}
+                </div>
+            </div>
+        </div>
+    );
+};
 
-export default ExpensesPage;
+export default Expenses;
